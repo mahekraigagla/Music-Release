@@ -1,0 +1,1 @@
+"""NextDrop – core package."""

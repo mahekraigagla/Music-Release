@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextDrop AI – Music Release Strategist</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --accent-purple: #a855f7;
+      --accent-pink: #ec4899;
+      --accent-cyan: #06b6d4;
+      --text-main: #f8fafc;
+    }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .card-custom {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #c084fc, #f472b6, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .btn-gradient {
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      border: none;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .btn-gradient:hover {
+      opacity: 0.95;
+      color: #ffffff;
+    }
+    .dropzone {
+      border: 2px dashed #a855f7;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      background: rgba(168, 85, 247, 0.1);
+      cursor: pointer;
+    }
+    .dropzone:hover, .dropzone.dragover {
+      border-color: #ec4899;
+      background: rgba(236, 72, 153, 0.15);
+    }
+    .badge-rss {
+      background: #8b5cf6;
+      color: #ffffff;
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+    .metric-pill {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .top-slot-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+  </style>
+</head>
+<body class="py-4">
+  <div class="container-fluid px-4">
+    <!-- Header (Artist-Friendly) -->
+    <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-secondary border-opacity-50">
+      <div>
+        <h2 class="gradient-text fw-bold m-0"><i class="fa-solid fa-record-vinyl me-2"></i>NextDrop AI Release Strategist</h2>
+        <p class="text-light m-0 small">Smart Music Audio Analysis • Audience Market Insights • Strategic Drop Windows</p>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <span class="badge bg-success py-2 px-3 fs-6"><i class="fa-solid fa-circle-check me-1"></i> Strategy Engine Ready</span>
+        <span class="badge bg-primary py-2 px-3 fs-6"><i class="fa-solid fa-chart-line me-1"></i> Market Insights Live</span>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Left Column: Song Upload & Metadata Form -->
+      <div class="col-xl-5 col-lg-6">
+        <div class="card card-custom p-4 mb-4">
+          <h5 class="fw-bold mb-3 text-info"><i class="fa-solid fa-cloud-arrow-up me-2"></i>1. Upload Song File (MP3 / WAV)</h5>
+          
+          <div id="dropzone" class="dropzone mb-3" onclick="document.getElementById('audioFileInput').click()">
+            <input type="file" id="audioFileInput" accept="audio/*" class="d-none" onchange="handleAudioUpload(this.files[0])">
+            <i class="fa-solid fa-music fa-2x text-warning mb-2"></i>
+            <h6 class="fw-bold text-light m-0">Drag & Drop Song File Here</h6>
+            <p class="text-secondary small m-0">or click to browse song file from your computer</p>
+          </div>
+          
+          <div id="audioStatus" class="d-none alert alert-info py-2 small mb-3"></div>
+
+          <!-- Acoustic Metrics Display -->
+          <div id="acousticMetrics" class="row g-2 mb-3 d-none">
+            <div class="col-4"><div class="metric-pill"><span class="text-secondary d-block small">Song Speed</span><strong id="mTempo" class="text-info fs-6">120 BPM</strong></div></div>
+            <div class="col-4"><div class="metric-pill"><span class="text-secondary d-block small">Energy</span><strong id="mEnergy" class="text-warning fs-6">0.72</strong></div></div>
+            <div class="col-4"><div class="metric-pill"><span class="text-secondary d-block small">Bounce</span><strong id="mDance" class="text-success fs-6">0.68</strong></div></div>
+          </div>
+        </div>
+
+        <div class="card card-custom p-4">
+          <h5 class="fw-bold mb-3 text-warning"><i class="fa-solid fa-sliders me-2"></i>2. Song Metadata & Release Goals</h5>
+          <form id="recommendForm">
+            <div class="row g-3 mb-3">
+              <div class="col-6">
+                <label class="form-label text-light fw-semibold small">Song Title</label>
+                <input type="text" id="title" class="form-control bg-dark text-light border-secondary" value="Midnight Echoes" required>
+              </div>
+              <div class="col-6">
+                <label class="form-label text-light fw-semibold small">Artist Name</label>
+                <input type="text" id="artist" class="form-control bg-dark text-light border-secondary" value="Neon Syndicate" required>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-6">
+                <label class="form-label text-light fw-semibold small">Genre</label>
+                <select id="genre" class="form-select bg-dark text-light border-secondary">
+                  <option value="Pop" selected>Pop</option>
+                  <option value="Hip-Hop">Hip-Hop</option>
+                  <option value="Electronic">Electronic</option>
+                  <option value="Rock">Rock</option>
+                  <option value="R&B">R&B</option>
+                  <option value="Indie">Indie</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label text-light fw-semibold small">Vibe / Mood</label>
+                <select id="mood" class="form-select bg-dark text-light border-secondary">
+                  <option value="Energetic" selected>Energetic</option>
+                  <option value="Chill">Chill</option>
+                  <option value="Melancholic">Melancholic</option>
+                  <option value="Happy">Happy</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-6">
+                <label class="form-label text-light fw-semibold small">Monthly Listeners</label>
+                <input type="number" id="monthly_listeners" class="form-control bg-dark text-light border-secondary" value="85000" required>
+              </div>
+              <div class="col-6">
+                <label class="form-label text-light fw-semibold small">Primary Release Goal</label>
+                <select id="artist_goal" class="form-select bg-dark text-light border-secondary">
+                  <option value="Maximum Streams" selected>Maximum Streams</option>
+                  <option value="Maximum Revenue">Maximum Revenue</option>
+                  <option value="Audience Growth">Audience Growth</option>
+                  <option value="Playlist Reach">Playlist Reach</option>
+                </select>
+              </div>
+            </div>
+
+            <input type="hidden" id="audio_file_path" value="">
+
+            <button type="submit" class="btn btn-gradient w-100 py-3 fs-5 mt-2">
+              <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Generate Optimal Release Strategy
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Results Dashboard -->
+      <div class="col-xl-7 col-lg-6">
+        <div id="resultsCard" class="card card-custom p-4 h-100">
+          <div class="text-center py-5 text-light my-auto">
+            <i class="fa-solid fa-chart-pie fa-4x mb-3 text-info"></i>
+            <h4 class="fw-bold">Ready to Generate Your Strategy</h4>
+            <p class="text-secondary">Upload your track or click <strong>Generate Optimal Release Strategy</strong> to view custom drop windows.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // File Drag & Drop Handling
+    const dropzone = document.getElementById('dropzone');
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) handleAudioUpload(e.dataTransfer.files[0]);
+    });
+
+    async function handleAudioUpload(file) {
+      if (!file) return;
+      const statusDiv = document.getElementById('audioStatus');
+      statusDiv.classList.remove('d-none', 'alert-danger');
+      statusDiv.classList.add('alert-info');
+      statusDiv.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i> Analyzing acoustic features for <strong>${file.name}</strong>...`;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch('/api/v1/analyze-audio', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.status === 'success') {
+          const feats = data.features;
+          document.getElementById('audio_file_path').value = feats.file_path || '';
+          document.getElementById('mTempo').textContent = `${feats.tempo} BPM`;
+          document.getElementById('mEnergy').textContent = feats.energy;
+          document.getElementById('mDance').textContent = feats.danceability;
+          document.getElementById('acousticMetrics').classList.remove('d-none');
+          statusDiv.innerHTML = `<i class="fa-solid fa-circle-check text-success me-2"></i> Extracted audio features for <strong>${file.name}</strong>!`;
+        }
+      } catch (err) {
+        statusDiv.classList.remove('alert-info');
+        statusDiv.classList.add('alert-danger');
+        statusDiv.innerHTML = `Audio analysis error: ${err.message}`;
+      }
+    }
+
+    document.getElementById('recommendForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const resultsDiv = document.getElementById('resultsCard');
+      resultsDiv.innerHTML = `
+        <div class="text-center py-5 my-auto">
+          <div class="spinner-border text-info mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+          <h5 class="fw-bold text-light">Analyzing 35 Target Drop Windows...</h5>
+          <p class="text-secondary small">Evaluating listener velocity, market opportunities, and optimal timing...</p>
+        </div>
+      `;
+
+      const payload = {
+        song: {
+          title: document.getElementById('title').value,
+          artist_name: document.getElementById('artist').value,
+          genre: document.getElementById('genre').value,
+          mood: document.getElementById('mood').value,
+          language: "en"
+        },
+        monthly_listeners: parseInt(document.getElementById('monthly_listeners').value),
+        artist_goal: document.getElementById('artist_goal').value,
+        audio_file_path: document.getElementById('audio_file_path').value || null
+      };
+
+      try {
+        const res = await fetch('/api/v1/recommend', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok || data.detail) {
+          resultsDiv.innerHTML = `<div class="alert alert-danger my-auto"><i class="fa-solid fa-triangle-exclamation me-2"></i> Error: ${data.detail || 'Failed to generate recommendation'}</div>`;
+          return;
+        }
+        renderResults(data);
+      } catch (err) {
+        resultsDiv.innerHTML = `<div class="alert alert-danger my-auto">Error: ${err.message}</div>`;
+      }
+    });
+
+    function renderResults(data) {
+      if (!data || (!data.primary_recommendation && (!data.top_5_recommendations || !data.top_5_recommendations.length))) {
+        document.getElementById('resultsCard').innerHTML = `<div class="alert alert-warning my-auto">No recommendation results found. Please check your inputs.</div>`;
+        return;
+      }
+      const top = data.primary_recommendation || data.top_5_recommendations[0];
+      const html = `
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <span class="badge badge-rss fw-bold"><i class="fa-solid fa-bolt me-2"></i> Release Score: ${top.release_strategy_score}/100</span>
+          <span class="badge bg-success py-2 px-3 fs-6"><i class="fa-solid fa-bullseye me-1"></i> ${data.artist_goal}</span>
+        </div>
+
+        <h3 class="fw-bold text-light mb-2">${data.headline}</h3>
+        <p class="text-light fs-6 mb-4">${data.summary}</p>
+
+        <div class="row g-3 mb-4">
+          <div class="col-6">
+            <div class="p-3 bg-dark rounded-3 border border-secondary">
+              <span class="text-secondary d-block small fw-semibold">Estimated First-Week Streams</span>
+              <span class="fs-2 fw-bold text-success">${top.predicted_streams.toLocaleString()}</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 bg-dark rounded-3 border border-secondary">
+              <span class="text-secondary d-block small fw-semibold">Estimated Streaming Revenue</span>
+              <span class="fs-2 fw-bold text-info">₹${(top.expected_earnings_inr || Math.round(top.expected_earnings_usd * 83.5)).toLocaleString()} INR</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- High Contrast Top 5 Drop Windows -->
+        <h5 class="fw-bold mb-3 text-warning"><i class="fa-solid fa-ranking-star me-2"></i>Top Recommended Drop Windows</h5>
+        <div class="d-flex flex-column gap-2 mb-4">
+          ${data.top_5_recommendations.map((rec, idx) => `
+            <div class="top-slot-card d-flex justify-content-between align-items-center">
+              <div>
+                <span class="fw-bold text-warning fs-5 me-2">#${idx+1}</span>
+                <span class="fw-bold text-light fs-6 me-3">${rec.slot_name}</span>
+                <span class="badge bg-success text-white fw-bold px-2 py-1">${rec.predicted_streams.toLocaleString()} streams</span>
+              </div>
+              <span class="badge bg-primary text-white fs-6 fw-bold px-3 py-2">Score ${rec.release_strategy_score}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Dynamic Artist-Friendly Feature Drivers -->
+        <h5 class="fw-bold mb-3 text-info"><i class="fa-solid fa-compact-disc me-2"></i>🎵 What Drives Your Release Velocity</h5>
+        <div class="row g-2 mb-4">
+          ${data.feature_attributions.slice(0, 4).map(attr => `
+            <div class="col-6">
+              <div class="p-3 bg-dark rounded-3 border border-secondary d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-light text-capitalize">${attr.feature}</span>
+                <span class="badge ${attr.direction === 'positive' ? 'bg-success' : 'bg-danger'} text-white fw-bold fs-6">${attr.percentage_impact}%</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+      `;
+      document.getElementById('resultsCard').innerHTML = html;
+    }
+  </script>
+</body>
+</html>

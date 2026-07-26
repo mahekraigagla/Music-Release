@@ -1,0 +1,22 @@
+# Virtual Environment
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Environment & Credentials
+backend/.env
+.env
+*.log
+
+# Audio Uploads & Generated Outputs
+backend/uploads/
+uploads/
+data/raw/*.csv.csv
+data/raw/*.tsv.tsv
+data/merged/*.parquet
+
+# IDE Settings
+.vscode/
+.idea/
+*.swp
