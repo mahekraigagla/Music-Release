@@ -33,10 +33,17 @@ async def analyze_audio_file(file: UploadFile = File(...)) -> dict:
     """
     Upload an MP3/WAV song file to analyze acoustic features (tempo, energy, danceability, valence, key, loudness).
     """
-    settings.audio_upload_dir.mkdir(parents=True, exist_ok=True)
+    import tempfile
+    upload_dir = settings.audio_upload_dir
+    try:
+        upload_dir.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        upload_dir = Path(tempfile.gettempdir()) / "audio_uploads"
+        upload_dir.mkdir(parents=True, exist_ok=True)
+
     file_ext = Path(file.filename).suffix or ".mp3"
     temp_filename = f"upload_{uuid.uuid4().hex[:8]}{file_ext}"
-    file_path = settings.audio_upload_dir / temp_filename
+    file_path = upload_dir / temp_filename
 
     try:
         with open(file_path, "wb") as f:
